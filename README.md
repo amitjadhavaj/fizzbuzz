@@ -51,3 +51,5 @@ Non integer path parameters results in an error.
  
 	
 6. open the url in browser with new port - http://localhost:9000/fizzbuzz/100
+
+NOTE: I have added retriction on numbers from 1 to 100 only. And for negative number showing empty result.
