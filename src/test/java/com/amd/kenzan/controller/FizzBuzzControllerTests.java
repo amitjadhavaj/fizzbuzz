@@ -32,28 +32,15 @@ public class FizzBuzzControllerTests {
 	}
 
 	@Test
-	public void negativeNumber() throws Exception {
-		final Integer expectedSize = 0;
-		mockMvc.perform(get("/fizzbuzz/-17")).andExpect(status().isOk()).andExpect((x) -> {
-			Integer fizzNumber = (Integer) new org.json.JSONObject(x.getResponse().getContentAsString())
-					.getJSONArray("fizz").length();
-			Integer buzzNumber = (Integer) new org.json.JSONObject(x.getResponse().getContentAsString())
-					.getJSONArray("buzz").length();
-			Integer fizzBuzzNumber = (Integer) new org.json.JSONObject(x.getResponse().getContentAsString())
-					.getJSONArray("fizzBuzz").length();
-			Assert.assertEquals(expectedSize, fizzNumber);
-			Assert.assertEquals(expectedSize, buzzNumber);
-			Assert.assertEquals(expectedSize, fizzBuzzNumber);
-		});
-	}
-
-	@Test
 	public void textXmlReturns406NotAcceptable() throws Exception {
 		mockMvc.perform(get("/fizzbuzz/15").accept(TEXT_XML_VALUE)).andExpect(status().isNotAcceptable());
 	}
 
 	@Test
 	public void nonNumberReturns400BadRequest() throws Exception {
-		mockMvc.perform(get("/fizzbuzz/foo")).andExpect(status().isBadRequest());
+		mockMvc.perform(get("/fizzbuzz/foo")).andExpect((x) -> {
+			String errorCode = new org.json.JSONObject(x.getResponse().getContentAsString()).getString("errorCode");
+			Assert.assertEquals("400", errorCode);
+		});
 	}
 }
